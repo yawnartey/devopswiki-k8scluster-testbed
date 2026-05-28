@@ -1,0 +1,6 @@
+Notes.txt
+.terraform*
+terraform.tfvars
+README.txt
+terraform.tfstate*
+.DS_Store
