@@ -12,9 +12,9 @@ terraform {
   }
 
   backend "s3" {
-    bucket       = "devopswiki-testbed-tf-state-bucket-8daccc39b5d2c2e9"
-    key          = "state/terraform.tfstate"
-    region       = "eu-west-3"
+    bucket       = "devops-wiki-tf-state-bucket-c9123c3a736c3547"
+    key          = "k8scluster-testbed/terraform.tfstate"
+    region       = "eu-central-1"
     encrypt      = true
     use_lockfile = true
     profile      = "lync"
