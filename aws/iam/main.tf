@@ -1,6 +1,6 @@
 # iam role for frontend ec2
-resource "aws_iam_role" "testbed_fe_instance_role" {
-  name = "devopswiki-testbed-fe-instance-role"
+resource "aws_iam_role" "testbed_k8s_fe_instance_role" {
+  name = "devopswiki-testbed-k8s-fe-instance-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -13,9 +13,9 @@ resource "aws_iam_role" "testbed_fe_instance_role" {
 }
 
 # allow s3 access to the letsencrypt bucket only
-resource "aws_iam_role_policy" "testbed_fe_s3_policy" {
-  name = "devopswiki-testbed-fe-s3-policy"
-  role = aws_iam_role.testbed_fe_instance_role.id
+resource "aws_iam_role_policy" "testbed_k8s_fe_s3_policy" {
+  name = "devopswiki-testbed-k8s-fe-s3-policy"
+  role = aws_iam_role.testbed_k8s_fe_instance_role.id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -31,7 +31,7 @@ resource "aws_iam_role_policy" "testbed_fe_s3_policy" {
 }
 
 # instance profile to attach the role to the ec2
-resource "aws_iam_instance_profile" "testbed_fe_instance_profile" {
-  name = "devopswiki-testbed-fe-instance-profile"
-  role = aws_iam_role.testbed_fe_instance_role.name
+resource "aws_iam_instance_profile" "testbed_k8s_fe_instance_profile" {
+  name = "devopswiki-testbed-k8s-fe-instance-profile"
+  role = aws_iam_role.testbed_k8s_fe_instance_role.name
 }
