@@ -4,7 +4,7 @@ resource "aws_instance" "devopswiki-testbed-cp" {
   instance_type          = "t2.medium"
   subnet_id              = var.subnet_ids["testbed-control-plane-subnet"]
   vpc_security_group_ids = [var.testbed_cp_security_group_id, var.cluster_nodes_sg]
-  iam_instance_profile   = var.testbed_fe_instance_profile
+  iam_instance_profile   = var.testbed_k8s_fe_instance_profile
   user_data_base64 = base64encode(
     templatefile("${path.module}/scripts/bootstrap-testbed-cp.sh", {
       yaw_public_key    = var.yaw_public_key
@@ -25,7 +25,7 @@ resource "aws_instance" "devopswiki-testbed-fe" {
   instance_type          = "t2.micro"
   subnet_id              = var.subnet_ids["testbed-fe-worker-node-subnet"]
   vpc_security_group_ids = [var.testbed_fe_security_group_id, var.cluster_nodes_sg]
-  iam_instance_profile   = var.testbed_fe_instance_profile
+  iam_instance_profile   = var.testbed_k8s_fe_instance_profile
   user_data = templatefile("${path.module}/scripts/bootstrap-testbed-fe.sh", {
     be_private_ip     = aws_instance.devopswiki-testbed-be.private_ip
     cp_private_ip     = aws_instance.devopswiki-testbed-cp.private_ip
