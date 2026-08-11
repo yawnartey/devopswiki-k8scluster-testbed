@@ -88,3 +88,6 @@ su - yaw -c "kubectl apply -f https://projectcalico.docs.tigera.io/manifests/cal
 # install metrics server and patch for self-signed kubelet certs
 su - yaw -c "kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml"
 su - yaw -c "kubectl patch deployment metrics-server -n kube-system --type=json -p='[{\"op\": \"add\", \"path\": \"/spec/template/spec/containers/0/args/-\", \"value\": \"--kubelet-insecure-tls\"}]'"
+
+# install ebs csi driver for persistent volume provisioning
+su - yaw -c "kubectl apply -k 'github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.36'"
