@@ -55,6 +55,7 @@ module "compute" {
   testbed_be_security_group_id    = module.security_group.testbed_be_security_group_id
   cluster_nodes_sg                = module.security_group.cluster_nodes_sg_id
   testbed_k8s_fe_instance_profile = module.iam.testbed_k8s_fe_instance_profile_name
+  testbed_k8s_be_instance_profile = module.iam.testbed_k8s_be_instance_profile_name
   yaw_public_key                  = var.yaw_public_key
   yaw_priv_key                    = local.yaw_priv_key_content
   postgres_user                   = var.postgres_user

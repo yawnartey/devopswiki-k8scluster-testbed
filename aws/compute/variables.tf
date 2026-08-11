@@ -28,3 +28,6 @@ variable "postgres_password" {
 variable "testbed_k8s_fe_instance_profile" {
   type = string
 }
+variable "testbed_k8s_be_instance_profile" {
+  type = string
+}
