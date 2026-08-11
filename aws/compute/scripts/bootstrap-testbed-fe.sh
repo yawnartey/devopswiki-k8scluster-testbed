@@ -84,7 +84,10 @@ EOF
 yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 systemctl enable --now kubelet
 
-# join the cluster 
+# set node labels at kubelet startup
+echo 'KUBELET_EXTRA_ARGS=--node-labels=role=frontend' > /etc/sysconfig/kubelet
+
+# join the cluster
 CONTROL_PLANE_IP=${cp_private_ip}
 JOIN_FILE=/home/yaw/kubeadm-join.txt
 
@@ -95,3 +98,7 @@ for i in {1..10}; do
 done
 
 bash /tmp/kubeadm-join.txt
+
+# add node-role label for kubectl get nodes ROLES column display
+scp -i /home/yaw/.ssh/priv_key -o StrictHostKeyChecking=no yaw@$CONTROL_PLANE_IP:/home/yaw/.kube/config /tmp/admin.conf
+KUBECONFIG=/tmp/admin.conf kubectl label node $(hostname -f) node-role.kubernetes.io/frontend=
