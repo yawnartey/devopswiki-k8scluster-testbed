@@ -45,6 +45,7 @@ resource "aws_instance" "devopswiki-testbed-be" {
   instance_type          = "t2.micro"
   subnet_id              = var.subnet_ids["testbed-be-worker-node-subnet"]
   vpc_security_group_ids = [var.testbed_be_security_group_id, var.cluster_nodes_sg]
+  iam_instance_profile   = var.testbed_k8s_be_instance_profile
   user_data = templatefile("${path.module}/scripts/bootstrap-testbed-be.sh", {
     cp_private_ip     = aws_instance.devopswiki-testbed-cp.private_ip
     yaw_public_key    = var.yaw_public_key
