@@ -11,6 +11,20 @@ resource "aws_security_group" "cluster_nodes_sg" {
     protocol    = "tcp"
     self        = true
   }
+  ingress {
+    description = "Calico BGP between cluster nodes"
+    from_port   = 179
+    to_port     = 179
+    protocol    = "tcp"
+    self        = true
+  }
+  ingress {
+    description = "Calico IPIP between cluster nodes"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "4"
+    self        = true
+  }
 
   egress {
     from_port   = 0
