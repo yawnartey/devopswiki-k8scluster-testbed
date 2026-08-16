@@ -60,6 +60,8 @@ module "compute" {
   yaw_priv_key                    = local.yaw_priv_key_content
   postgres_user                   = var.postgres_user
   postgres_password               = var.postgres_password
+  env = var.env
+  domain = var.domain
 }
 
 # dns module
