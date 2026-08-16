@@ -1,3 +1,6 @@
+# get the region
+data "aws_region" "current" {}
+
 # control plane ec2 instance
 resource "aws_instance" "devopswiki-testbed-cp" {
   ami                    = "ami-075518ffc9234909a"
@@ -7,6 +10,9 @@ resource "aws_instance" "devopswiki-testbed-cp" {
   iam_instance_profile   = var.testbed_k8s_fe_instance_profile
   user_data_base64 = base64encode(
     templatefile("${path.module}/scripts/bootstrap-testbed-cp.sh", {
+      aws_region = data.aws_region.current.id
+      env = var.env
+      domain = var.domain
       yaw_public_key    = var.yaw_public_key
       postgres_user     = var.postgres_user
       postgres_password = var.postgres_password
@@ -18,7 +24,6 @@ resource "aws_instance" "devopswiki-testbed-cp" {
   }
 }
 
-
 # frontend worker ec2 instance
 resource "aws_instance" "devopswiki-testbed-fe" {
   ami                    = "ami-075518ffc9234909a"
@@ -27,6 +32,9 @@ resource "aws_instance" "devopswiki-testbed-fe" {
   vpc_security_group_ids = [var.testbed_fe_security_group_id, var.cluster_nodes_sg]
   iam_instance_profile   = var.testbed_k8s_fe_instance_profile
   user_data = templatefile("${path.module}/scripts/bootstrap-testbed-fe.sh", {
+    aws_region = data.aws_region.current.id
+    env = var.env
+    domain = var.domain
     be_private_ip     = aws_instance.devopswiki-testbed-be.private_ip
     cp_private_ip     = aws_instance.devopswiki-testbed-cp.private_ip
     yaw_public_key    = var.yaw_public_key
@@ -47,6 +55,9 @@ resource "aws_instance" "devopswiki-testbed-be" {
   vpc_security_group_ids = [var.testbed_be_security_group_id, var.cluster_nodes_sg]
   iam_instance_profile   = var.testbed_k8s_be_instance_profile
   user_data = templatefile("${path.module}/scripts/bootstrap-testbed-be.sh", {
+    aws_region = data.aws_region.current.id
+    env = var.env
+    domain = var.domain
     cp_private_ip     = aws_instance.devopswiki-testbed-cp.private_ip
     yaw_public_key    = var.yaw_public_key
     yaw_priv_key      = var.yaw_priv_key
