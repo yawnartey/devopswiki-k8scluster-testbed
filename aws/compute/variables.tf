@@ -31,3 +31,9 @@ variable "testbed_k8s_fe_instance_profile" {
 variable "testbed_k8s_be_instance_profile" {
   type = string
 }
+variable "env" {
+  type = string
+}
+variable "domain" {
+  type = string
+}

@@ -67,11 +67,38 @@ resource "aws_iam_policy" "testbed_k8s_ebs_csi_policy" {
   })
 }
 
+# ssm policy to send/retrieve credentials from parameter store
+resource "aws_iam_policy" "testbed_k8s_ssm_policy" {
+  name = "devopswiki-testbed-k8s-ssm-policy"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = ["ssm:GetParameter", "ssm:GetParameters"]
+      Resource = "arn:aws:ssm:*:*:parameter/devopswiki-*"
+    }]
+  })
+}
+
+# ssm policy attached to the control plane and frontend worker node
+resource "aws_iam_role_policy_attachment" "fe_ssm" {
+  role       = aws_iam_role.testbed_k8s_fe_instance_role.name
+  policy_arn = aws_iam_policy.testbed_k8s_ssm_policy.arn
+}
+
+# ssm policy attached to the backend worker node
+resource "aws_iam_role_policy_attachment" "be_ssm" {
+  role       = aws_iam_role.testbed_k8s_be_instance_role.name
+  policy_arn = aws_iam_policy.testbed_k8s_ssm_policy.arn
+}
+
+# attach csi policy to the control plane and frontend worker node
 resource "aws_iam_role_policy_attachment" "fe_ebs_csi" {
   role       = aws_iam_role.testbed_k8s_fe_instance_role.name
   policy_arn = aws_iam_policy.testbed_k8s_ebs_csi_policy.arn
 }
 
+# attach csi policy to the backend worker node
 resource "aws_iam_role_policy_attachment" "be_ebs_csi" {
   role       = aws_iam_role.testbed_k8s_be_instance_role.name
   policy_arn = aws_iam_policy.testbed_k8s_ebs_csi_policy.arn
